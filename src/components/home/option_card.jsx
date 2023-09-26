@@ -11,39 +11,39 @@ export default function Option_Card(props){
             p='4'
             align='left'
             position={'relative'}
-            bgColor={props.bodyBg}
+            bgColor={props.option.bodyBg}
             cursor={'pointer'}
             _hover={{
                 boxShadow:'md',
             }}
             transition=".3s ease"
         >
-            <Heading as='h2' fontSize={'2xl'} py='2'>{props.title}</Heading>
-            <Text py='2' w={{base:'60%',md:'40%'}}>{props.description}</Text>
+            <Heading as='h2' fontSize={'2xl'} py='2'>{props.option.title}</Heading>
+            <Text py='2' w={{base:'60%',md:'40%'}}>{props.option.description}</Text>
             <Button
-                bgColor={props.buttonbg}
+                bgColor={props.option.buttonbg}
                 borderRadius={'10'}
                 fontWeight={'bold'}
                 color='#fff'
             >
-                {props.buttondesc}
+                {props.option.buttondesc}
             </Button>
             <Box 
-                borderRadius={props.tagradius} 
+                borderRadius={props.option.tagradius} 
                 position={'absolute'} 
                 top='10' 
                 right='10' 
-                boxSize={props.tagSize} 
-                bgColor={props.tagColor} 
+                boxSize={props.option.tagSize} 
+                bgColor={props.option.tagColor} 
                 transform={'rotate(-30deg)'}
             />
             <Box 
-                borderRadius={props.tag2radius} 
+                borderRadius={props.option.tag2radius} 
                 position={'absolute'} 
                 top='50%' 
                 right='5' 
-                boxSize={props.tag2Size} 
-                bgColor={props.tag2Color}
+                boxSize={props.option.tag2Size} 
+                bgColor={props.option.tag2Color}
                 transform={'rotate(30deg)'}
             />
         </Box>

@@ -1,7 +1,9 @@
 'use client'
 import React from "react";
+// components
 import Body from "./body";
 import Header from "./header";
+// utilities 
 const { Box, Drawer, DrawerOverlay, DrawerContent, useDisclosure } = require("@chakra-ui/react");
 
 export default function Section(props){
@@ -15,9 +17,10 @@ export default function Section(props){
         >
             <Body
                 display={{
-                    base: "none",
-                    md: "unset",
+                    base: "none", // small screen
+                    md: "unset", // big screen
                 }}
+                borderRight="none"
             />
             <Drawer
                 isOpen={sidebar_toggle.isOpen}

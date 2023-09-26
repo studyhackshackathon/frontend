@@ -34,9 +34,10 @@ export default function Profile_Card(){
                     name='john doe'
                     borderRadius={'5'}
                     size='md'
+                    src=''
                 />
                 <Box align='center'>
-                    <Text fontWeight={'bold'}>Dennis Sammy</Text>
+                    <Text fontWeight={'bold'}>Dennis Sammy</Text> 
                     <Text fontSize={'xx-small'} color='gray'>dennissammy@gmail.com</Text>
                 </Box>
             </HStack>

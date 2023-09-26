@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 // utils
-const { Box, Divider, Flex } = require("@chakra-ui/react");
+import { Box, Divider, Flex } from "@chakra-ui/react";
 // icons
 import {MdSpaceDashboard} from 'react-icons/md';
 import {BsTextLeft} from 'react-icons/bs';
@@ -24,7 +24,7 @@ export default function Body(props){
             zIndex="sticky"
             h="full"
             pb="10"
-            px='2'
+            px='6'
             overflowX="hidden"
             overflowY="auto"
             bg="#ffffff"
@@ -38,7 +38,7 @@ export default function Body(props){
             <Box>
                 <Profile_Card/>
                 <Divider/>
-                {navs?.map((nav)=>{
+                {navigations?.map((nav)=>{
                     return(
                         <Nav_Item key={nav?.id} nav={nav}>
                             {nav?.title}
@@ -51,7 +51,7 @@ export default function Body(props){
     )
 }
 
-const navs = [
+const navigations = [
     {
         id:'1',
         title:'Dashboard',

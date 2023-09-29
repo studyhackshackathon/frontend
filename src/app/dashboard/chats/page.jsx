@@ -5,8 +5,9 @@ import { Box, Divider, Flex, HStack, Heading, Icon, SimpleGrid } from "@chakra-u
 import {MdAdd} from 'react-icons/md';
 import {HiOutlineChatAlt2} from 'react-icons/hi';
 import Chat_card from "@/src/components/lib/chat_card";
+import { useRouter } from "next/navigation";
 
-export default function page() {
+export default function Page() {
   let arr = [1,2,3,4,5,6,7,8];
   return (
     <Box bgColor='#fff' borderRadius={'5'} p='4' boxShadow={'sm'}>
@@ -29,6 +30,7 @@ export default function page() {
             borderRadius='5'
             color='#fff'
             icon={MdAdd}
+            path={'/dashboard/chats/chat/new'}
         >
             New
         </Action_Button>

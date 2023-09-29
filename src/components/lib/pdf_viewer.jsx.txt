@@ -1,0 +1,23 @@
+import * as React from 'react';
+
+import { Viewer, Worker } from '@react-pdf-viewer/core';
+
+const Pdf_Viewer = () => {
+
+    return (
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.15.349/build/pdf.worker.js">
+            <div
+                style={{
+                    height: '750px',
+                    width: '900px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                }}
+            >
+                <Viewer fileUrl="../../public/assets/invite.pdf" />
+            </div>
+        </Worker>
+    );
+};
+
+export default Pdf_Viewer;

@@ -55,7 +55,7 @@ const navigations = [
     {
         id:'1',
         title:'Dashboard',
-        path: 'home',
+        path: '/dashboard/home',
         icon: MdSpaceDashboard,
     },
     {

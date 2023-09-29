@@ -6,7 +6,7 @@ export default function Option_Card(props){
     return(
         <Box
             w='full'
-            borderRadius={'5'}
+            borderRadius={'10'}
             color={'#FFFFFF'}
             p='4'
             align='left'

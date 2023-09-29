@@ -31,7 +31,7 @@ export default function Nav_Item(props){
             borderRadius={pathname[2] == props?.nav.path ? 10: 10}
             boxShadow={pathname[2] == props?.nav.path ? 'lg': null}
 
-            onClick={()=>{router.push(props?.nav.path)}} // http://localhost:3000/dashboard/summaries
+            onClick={()=>{router.push(`${props?.nav.path}`)}} // http://localhost:3000/dashboard/summaries
         >
             {props?.nav.icon && (
                 <Icon

@@ -4,12 +4,12 @@ import React from 'react';
 import {BsFiletypePdf} from 'react-icons/bs';
 import {GoLinkExternal} from 'react-icons/go';
 
-export default function Chat_card() {
+export default function Summary_card() {
   const router = useRouter();
   return (
     <Box 
       borderRadius={'10'} 
-      bgColor='#ABBEEA' 
+      bgColor='#D5C6E0' 
       w='full' 
       p='2' 
       position={'relative'}
@@ -19,11 +19,11 @@ export default function Chat_card() {
         m:'0.4'
       }}
       transition=".2s ease"
-      onClick={(()=>{router.push('/dashboard/chats/chat/1')})}
+      onClick={(()=>{router.push('/dashboard/summaries/summary/1')})}
     >
       <Image
         src='/assets/chat_image.jpg'
-        alt='chat_image'
+        alt='summary_image'
         w='full'
         h='200'
         objectFit={'cover'}
@@ -40,10 +40,10 @@ export default function Chat_card() {
               }}
               as={BsFiletypePdf}
           />
-          <Text fontSize={'xs'} fontWeight={'bold'}>Pdf</Text>
+          <Text fontSize={'xs'} fontWeight={'bold'}>Text</Text>
         </HStack>
         <IconButton 
-          aria-label='View document' 
+          aria-label='View summary' 
           icon={<GoLinkExternal />} 
           position={'absolute'} 
           top='3' 

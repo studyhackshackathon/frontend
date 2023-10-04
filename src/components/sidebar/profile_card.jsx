@@ -1,8 +1,10 @@
 'use client'
+import { useRouter } from "next/navigation";
 import React from "react";
 const { Box, Text, Image, Avatar, HStack } = require("@chakra-ui/react");
 
 export default function Profile_Card(){
+    const router = useRouter()
     return(
         <Box
             px={{
@@ -28,6 +30,8 @@ export default function Profile_Card(){
                     base: "none",
                     md: "inline-flex",
                 }}
+                onClick={()=>{router.push(`/dashboard/home`)}}
+                cursor={'pointer'}
             />
             <HStack>
                 <Avatar

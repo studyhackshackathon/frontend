@@ -55,7 +55,7 @@ const navigations = [
     {
         id:'1',
         title:'Dashboard',
-        path: '/dashboard/home',
+        path: 'home',
         icon: MdSpaceDashboard,
     },
     {
@@ -83,7 +83,7 @@ const navigations = [
         icon: CgProfile,
     },
     {
-        id:'5',
+        id:'6',
         title:'Pricing',
         path: '',
         icon: GiUpgrade,

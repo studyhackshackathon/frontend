@@ -1,10 +1,7 @@
 'use client'
 import React from 'react';
 // utils
-import { Box, Button, Divider, Flex, HStack, Heading, Icon, Text } from '@chakra-ui/react';
-// components
-// import Option_Card from '@/src/components/home/option_card';
-// icons
+import { Box, Button, Flex, HStack, Heading, Icon, Text, Textarea } from '@chakra-ui/react';
 import {BsArrowLeft,BsInfoCircleFill} from 'react-icons/bs';
 import Drop_Zone from '@/src/components/lib/dropzone';
 import { useRouter } from 'next/navigation';
@@ -13,7 +10,15 @@ import { useRouter } from 'next/navigation';
 export default function Page() {
   const router = useRouter();
   return (
-    <Box bgColor='#fff' borderRadius={'5'} p='4' boxShadow={'lg'} >
+    <Box 
+        bgColor='#fff' 
+        borderRadius={'5'} 
+        boxShadow={'lg'} 
+        p={{
+            base:'4',
+            md:'6'
+        }}
+    >
         <Button leftIcon={<BsArrowLeft />} onClick={(()=>{router.back()})}>
             Back
         </Button>
@@ -40,19 +45,14 @@ export default function Page() {
                 })}
             </Box>
         </Flex>
-        <Box
-            margin={{
-                base:'0',
-                md:'6'
-            }}
-        >
-            <Drop_Zone/>
+        <Box>
+            <Textarea placeholder='paste your content here' focusBorderColor='#8B3C7F' variant={'filled'} size='lg' borderRadius={5}/>
             <Button
                 bgColor='#8B3C7F'
                 color={'#fff'}
                 mt='2'
             >
-                Upload File
+                Summarize
             </Button>
         </Box>
     </Box>
@@ -60,25 +60,23 @@ export default function Page() {
 }
 
 const option_card_props={
-    bodyBg:'#192A51',
-    title:'Chat with PDFs',
-    description:'Ask and let AI help you understand concepts from documents.',
-    buttonbg:'#8B3C7F',
-    buttondesc:'Upload File',
-    tagradius:'10',
-    tagColor:'#273E73',
+    bodyBg:'#967AA1',
+    title:'Summarize Text',
+    description:'Paste and get appropriate summaries of concepts and text.',
+    buttonbg:'#192A51',
+    buttondesc:'Paste Text',
+    tagradius:'100',
+    tagColor:'#8B3C7F',
     tagSize:'100',
-    tag2radius:'5',
-    tag2Color:'#5578C8',
+    tag2radius:'50',
+    tag2Color:'#B051A2',
     tag2Size:'50',
 }
 
 const instructions=[
-    'Upload your pdf document example: Engines.pdf',
-    'Let us train our model with the document.',
-    'Start interacting with the chatbot',
-    'Ask bot questions example: What is an engine?',
-    'Get responses',
+    'Paste your content',
+    'Let our AI model summarize the content.',
+    'View the summarized content',
 ]
 
 const Option_Card=(props)=>{

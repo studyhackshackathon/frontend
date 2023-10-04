@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 export default function Nav_Item(props){
     const router = useRouter();
     const pathname = usePathname().split('/');
+    console.log(pathname[2])
     return(
         <Flex
             align="center"
@@ -26,12 +27,12 @@ export default function Nav_Item(props){
             }}
             
             // functionality to show active navigation item
-            bgColor={pathname[2] == props?.nav.path ? '#8B3C7F': "#F6F6F6"}
-            color={pathname[2] == props?.nav.path ? '#fff': "#000000"}
-            borderRadius={pathname[2] == props?.nav.path ? 10: 10}
-            boxShadow={pathname[2] == props?.nav.path ? 'lg': null}
+            bgColor={pathname[2] === props?.nav.path ? '#8B3C7F': "#F6F6F6"}
+            color={pathname[2] === props?.nav.path ? '#fff': "#000000"}
+            borderRadius={pathname[2] === props?.nav.path ? 10: 10}
+            boxShadow={pathname[2] === props?.nav.path ? 'lg': null}
 
-            onClick={()=>{router.push(`${props?.nav.path}`)}} // http://localhost:3000/dashboard/summaries
+            onClick={()=>{router.push(`/dashboard/${props?.nav.path}`)}} // http://localhost:3000/dashboard/summaries
         >
             {props?.nav.icon && (
                 <Icon

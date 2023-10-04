@@ -4,8 +4,10 @@ import React from "react";
 import { MdOutlineMenu } from "react-icons/md";
 import { AiOutlineBell } from "react-icons/ai";
 import { Flex, IconButton, Avatar, Icon } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 export default function Header(props){
+   const router = useRouter();
     return(
       <Flex
         as="header"
@@ -28,6 +30,7 @@ export default function Header(props){
             src='/assets/logo.png'
             alt='logo'
             objectFit="cover"
+            onClick={()=>{router.push(`/dashboard/home`)}}
           />
           <Flex gap='2' align='center'>
             <Icon

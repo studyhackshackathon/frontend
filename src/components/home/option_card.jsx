@@ -1,8 +1,10 @@
 'use client'
 import React from "react";
 import { Box, Button, Heading, Text } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 export default function Option_Card(props){
+    const router = useRouter();
     return(
         <Box
             w='full'
@@ -25,6 +27,7 @@ export default function Option_Card(props){
                 borderRadius={'10'}
                 fontWeight={'bold'}
                 color='#fff'
+                onClick={(()=>{router.push(`${props?.option?.path}`)})}
             >
                 {props.option.buttondesc}
             </Button>

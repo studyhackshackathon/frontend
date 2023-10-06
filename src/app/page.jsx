@@ -3,8 +3,8 @@ import { Text } from "@chakra-ui/react"
 import Image from "next/image";
 import Link from 'next/link'
 //import {signIn} from 'next-auth/client';
-
-export default function page() {
+//New changes
+export default function Page() {
     return (
       <div
         style={{

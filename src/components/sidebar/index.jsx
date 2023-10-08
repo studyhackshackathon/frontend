@@ -1,13 +1,49 @@
 'use client'
-import React from "react";
+import React, { useEffect, useState } from "react";
 // components
 import Body from "./body";
 import Header from "./header";
 // utilities 
-const { Box, Drawer, DrawerOverlay, DrawerContent, useDisclosure } = require("@chakra-ui/react");
+const { Box, Drawer, DrawerOverlay, DrawerContent, useDisclosure, useToast } = require("@chakra-ui/react");
+import Cookies from 'universal-cookie'; 
+import { useRouter } from "next/navigation";
+import Fetch_User from "../../api/auth/fetch_user.jsx";
 
 export default function Section(props){
+    // utilities
     const sidebar_toggle = useDisclosure();
+    const toast = useToast();
+    const cookies = new Cookies();
+    const router  = useRouter();
+    // apis
+    // data handlers
+    const [user_data,set_user_data]=useState({})
+	const access_token = cookies.get('user_token');
+    const user_id = cookies.get('user_id');
+
+
+    useEffect(()=>{
+        get_data();
+    },[user_id]);
+
+    const get_data=async()=>{
+        const result = await Fetch_User(user_id,access_token);
+        console.log(result)
+    }
+    
+    if(!access_token){
+        toast({
+            title: "Your token is missing",
+            description: '',
+            status: 'info',
+            isClosable: true,
+            position: 'top-left',
+            variant:'left-accent'
+        });
+        router.push('/');
+        return ;
+    }
+
     return(
         <Box 
             as="section"
@@ -21,6 +57,7 @@ export default function Section(props){
                     md: "unset", // big screen
                 }}
                 borderRight="none"
+                access_token={access_token}
             />
             <Drawer
                 isOpen={sidebar_toggle.isOpen}
@@ -36,6 +73,7 @@ export default function Section(props){
                             base: "unset",
                             md: "none",
                         }}
+                        access_token={access_token}
                     />
                 </DrawerContent>
             </Drawer>

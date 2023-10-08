@@ -46,7 +46,7 @@ export default function Body(props){
                     )
                 })}
             </Box>
-            <Footer/>
+            <Footer access_token={props?.access_token}/>
         </Flex>
     )
 }

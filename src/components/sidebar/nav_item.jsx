@@ -6,7 +6,6 @@ import { usePathname, useRouter } from 'next/navigation'
 export default function Nav_Item(props){
     const router = useRouter();
     const pathname = usePathname().split('/');
-    console.log(pathname[2])
     return(
         <Flex
             align="center"

@@ -13,7 +13,8 @@ export default function Page() {
         backgroundColor={'#8B3C7F'}
       >
         <Image 
-          src='/assets/landing_page.jpg' 
+          // src='/assets/landing_page.jpg' 
+          src='' 
           objectFit={'cover'} 
           alt='logo' w='full' h='full'
         />

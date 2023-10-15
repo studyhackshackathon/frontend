@@ -3,7 +3,8 @@ import React, {useCallback} from 'react'
 import {useDropzone} from 'react-dropzone'
 import {AiOutlineCloudUpload} from 'react-icons/ai'
 
-export default function Drop_Zone() {
+export default function Drop_Zone(props) {
+  const {set_file} = {...props}
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader()
@@ -13,7 +14,7 @@ export default function Drop_Zone() {
       reader.onload = () => {
       // Do whatever you want with the file contents
         const binaryStr = reader.result
-        console.log(binaryStr)
+        set_file(file)
       }
       reader.readAsArrayBuffer(file)
     })

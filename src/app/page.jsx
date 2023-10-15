@@ -1,21 +1,108 @@
 "use client"
-import { Text } from "@chakra-ui/react"
-import Image from "next/image";
+import { Box, Text, Image, HStack, Flex, Button } from "@chakra-ui/react"
 import Link from 'next/link'
-//import {signIn} from 'next-auth/client';
+import {useRouter} from 'next/navigation'
 
-export default function page() {
+export default function Page() {
+    const router = useRouter()
     return (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          position: "relative",
-          size: "md",
-          background: "#8B3C7F",
-        }}
+      <Box
+        w='100vw'
+        h='100vh'
+        position={'relative'}
+        backgroundColor={'#8B3C7F'}
       >
-        <div
+        <Image 
+          src='/assets/landing_page.jpg' 
+          objectFit={'cover'} 
+          alt='logo' w='full' h='full'
+        />
+        <Image 
+          src='/assets/logo.png' 
+          objectFit={'cover'} 
+          alt='logo' 
+          w={{base:'',md:'50%'}} 
+          h='30%'
+          position={'absolute'}
+          top='22.5%'
+          right='5%'
+        />
+        <Flex 
+          position={'absolute'}
+          top='0'
+          right={0}
+          p='4'
+          gap='4'
+          mr='4'
+          align='center'
+        >
+          <Text
+            color={'#fff'}
+            fontWeight={'bold'}
+            cursor={'pointer'}
+            _hover={{
+              textDecoration:'underline',
+              transition:".9s ease"
+            }}
+            onClick={(()=>router.push('/auth/signin'))}
+          >
+            SignIn
+          </Text>
+          <Button
+            bgColor={'#fff'}
+            color={'#8B3C7F'}
+            cursor={'pointer'}
+            boxShadow={'md'}
+            onClick={(()=>router.push('/auth/signup'))}
+          >
+            <Text
+              fontWeight={'bold'}
+            >Get Started</Text>
+          </Button>
+        </Flex>
+        <Box
+          position={'absolute'}
+          top='50%'
+          right='5%'
+          p='4'
+          gap='4'
+          mr='4'
+          align='center'
+          display={{base:'none',md:'block'}}
+        >
+          <Text 
+            fontSize={'42px'}
+            color={'#fff'}
+            fontWeight={'bold'}
+          >
+            Unlock Your Learning Potential.
+          </Text>
+        </Box>
+        <Box
+          position={'absolute'}
+          top='42.5%'
+          right='2.5%'
+          p='4'
+          gap='4'
+          mr='4'
+          align='center'
+          display={{base:'block',md:'none'}}
+        >
+          <Text 
+            fontSize={'16px'}
+            color={'#fff'}
+            fontWeight={'bold'}
+          >
+            Unlock Your Learning Potential.
+          </Text>
+        </Box>
+      </Box>
+    );
+}
+
+/**
+ * 
+ * <div
           style={{
             width: 638,
             height: 241,
@@ -31,7 +118,7 @@ export default function page() {
             wordWrap: "break-word",
           }}
         >
-          Unlock Your Learning Potential <br />
+          Un lock Your Learning Potential <br />
           with AI.
         </div>
         <div
@@ -263,6 +350,4 @@ export default function page() {
             </div>
           </div>
         </div>
-      </div>
-    );
-}
+ */

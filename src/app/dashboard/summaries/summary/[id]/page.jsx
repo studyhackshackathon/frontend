@@ -28,16 +28,68 @@ import {
         useDisclosure 
 } from '@chakra-ui/react'
 import { usePathname, useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { HiOutlineChatAlt2 } from 'react-icons/hi';
 import { IoIosChatboxes, IoMdArrowDropdown } from 'react-icons/io';
 import { MdSpaceDashboard } from 'react-icons/md';
 import { BiRefresh } from 'react-icons/bi';
+import Cookies from 'universal-cookie'; 
+import axios from 'axios';
 
 export default function Page() {
     const router = useRouter();
     const pathname = usePathname().split('/');
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    let item_id = pathname[4];
+    const cookies = new Cookies();
+
+    const [summary_data,set_summary_data]=useState('');
+    const access_user_token = cookies.get('user_token');
+    const user_id = cookies.get('user_id');
+
+    useEffect(()=>{
+      get_Data()
+    },[])
+  
+    const get_Data=async()=>{
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: 'https://api-docs-studyhacks-v1.onrender.com/sammary',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${access_user_token}`,
+            },
+        };
+        await axios.request(config).then((response) => {
+            let data = response?.data?.summaries;
+
+            let filteredData = data?.filter((item)=>item?.user_id.includes(user_id) && item?._id.includes(item_id));
+
+            let reduced_data = filteredData.reduce((a, b) => Object.assign(a, b), {});
+            set_summary_data(reduced_data);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const handle_delete_Summary=async()=>{
+        let config = {
+            method: 'delete',
+            maxBodyLength: Infinity,
+            url: `https://api-docs-studyhacks-v1.onrender.com/sammary/${pathname[4]}`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${access_user_token}`,
+            },
+        };
+        await axios.request(config).then((response) => {
+            console.log(response)
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
   return (
     <Box bgColor='#fff' borderRadius={'5'} p='4' boxShadow={'lg'}>
         <Breadcrumb fontSize={'xs'} pb={'2'}>
@@ -50,38 +102,34 @@ export default function Page() {
                     }}
                     as={MdSpaceDashboard}
                 />
-                <BreadcrumbLink href='#'>Home</BreadcrumbLink>
+                <BreadcrumbLink onClick={(()=>{router.push(`/dashboard/home`)})}>Home</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbItem>
-                <BreadcrumbLink href='#'>summaries</BreadcrumbLink>
+                <BreadcrumbLink onClick={(()=>{router.push(`/dashboard/summaries`)})}>summaries</BreadcrumbLink>
             </BreadcrumbItem>
 
             <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink href='#'>{pathname[4]}</BreadcrumbLink>
+                <BreadcrumbLink >{pathname[4]}</BreadcrumbLink>
             </BreadcrumbItem>
         </Breadcrumb>
         <Divider/>
         <Box h='93vh' mt='2'>
-            <Accordion_Card/>
-            <HStack mt='2'>
-                <Button bgColor={'#8B3C7F'} color='#FFFFFF'>
-                    Save
-                </Button>
-                <Button leftIcon={<BiRefresh />} variant='solid'>
-                    Regenerate
-                </Button>
-            </HStack>
+            <Accordion_Card prompt={summary_data?.sammary?.prompt}/>
             <Text my='2'>Your Summary</Text>
-            <Text p='2' bgColor='#D5C6E0' borderRadius={'5'} boxShadow={'md'}>
-                This paper discusses the implementation of a fluid dynamics solver for game engines. The goal is to include fluid flows in game engines to enhance immersion. The focus is on creating realistic fluid-like effects in real-time. The algorithms are based on the Navier-Stokes equations and prioritize stability and speed over strict physical accuracy. The paper provides a complete C code implementation and demonstrates the algorithms running in real time on standard PC hardware. In Chapter 1, the paper covers the overview of the concepts discussed in this paper as well as an introduction to the concept of fluid dynamics. It covers the basics of how the solver is implemented and discusses some of the most important design decisions such as which extension to implement and how it can be used to simulate different phenomena. This chapter continues with a discussion of the specific problems that the study addresses in order to demonstrate the performance and ease of use of the solution.
-            </Text>
+            <Box p='2' bgColor='#D5C6E0' borderRadius={'5'} boxShadow={'md'} h={{base:'35vh',md:'35vh'}} overflowY={'scroll'}>
+                <Text>
+                {summary_data?.sammary?.sammary}
+                </Text>
+            </Box>
+            <Button bgColor='#8B3C7F' color={'#fff'} mt='2' onClick={handle_delete_Summary}>Delete </Button>
         </Box>
     </Box>
   )
 }
 
-const Accordion_Card=()=>{
+const Accordion_Card=(props)=>{
+    const {prompt} = {...props}
     return(
         <Accordion allowToggle>
             <AccordionItem>
@@ -93,11 +141,8 @@ const Accordion_Card=()=>{
                     <AccordionIcon as={IoMdArrowDropdown}/>
                 </AccordionButton>
                 </h2>
-                <AccordionPanel pb={4} bg={'#AAA1C8'} borderRadius={'5'} fontWeight={'semibold'}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat.
+                <AccordionPanel pb={4} bg={'#AAA1C8'} borderRadius={'5'} fontWeight={'semibold'} h={{base:'35vh',md:'35vh'}} overflowY={'scroll'}>
+                    {prompt}
                 </AccordionPanel>
             </AccordionItem>
         </Accordion>

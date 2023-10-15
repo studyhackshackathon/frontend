@@ -5,9 +5,43 @@ import { Box, Divider, HStack, Heading, Icon, SimpleGrid } from "@chakra-ui/reac
 import {MdAdd} from 'react-icons/md';
 import { BsTextLeft } from "react-icons/bs";
 import Summary_card from "@/src/components/lib/summary_card";
+import Cookies from 'universal-cookie'; 
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Page() {
-  let arr = [1,2,3,4,5,6,7,8];
+  const cookies = new Cookies();
+
+    const [summary_data,set_summary_data]=useState([]);
+    const access_user_token = cookies.get('user_token');
+    const user_id = cookies.get('user_id');
+
+    const [search_query,set_search_query]=useState('');
+
+    useEffect(()=>{
+      get_Data()
+    },[search_query])
+  
+    const get_Data=async()=>{
+      let config = {
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: 'https://api-docs-studyhacks-v1.onrender.com/sammary',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `${access_user_token}`,
+          },
+      };
+      await axios.request(config).then((response) => {
+          let data = response?.data?.summaries;
+          //console.log(data);
+          let filteredData = data?.filter((item)=>item?.user_id.includes(user_id))
+          set_summary_data(filteredData?.filter((item)=>item?.title.toLowerCase().includes(search_query.toLowerCase())));
+          //console.log(filteredData);
+      }).catch((error) => {
+          console.log(error);
+      });
+    }
   return (
     <Box bgColor='#fff' borderRadius={'5'} p='4' boxShadow={'sm'}>
       <HStack align='center' p='2'>
@@ -23,7 +57,7 @@ export default function Page() {
       </HStack>
       {/**The search section goes here */}
       <HStack>
-        <Search_Input description='search summaries'/>
+        <Search_Input description='search summaries' set_search_query={set_search_query}/>
         <Action_Button
             bgColor='#8B3C7F'
             borderRadius='5'
@@ -38,9 +72,9 @@ export default function Page() {
       <Divider/>
       {/**The chats section starts here */}
       <SimpleGrid minChildWidth='250px' spacing='20px' mt='2'>
-        {arr?.map((index,item)=>{
+        {summary_data?.map((item)=>{
           return(
-            <Summary_card key={index}/>
+            <Summary_card key={item?._id} item={item}/>
           )
         })}
       </SimpleGrid>

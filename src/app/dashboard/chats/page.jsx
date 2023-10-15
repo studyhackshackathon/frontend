@@ -6,9 +6,32 @@ import {MdAdd} from 'react-icons/md';
 import {HiOutlineChatAlt2} from 'react-icons/hi';
 import Chat_card from "@/src/components/lib/chat_card";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Cookies from 'universal-cookie'; 
+import All_Chats from "@/src/api/chats/fetch_all";
 
 export default function Page() {
-  let arr = [1,2,3,4,5,6,7,8];
+    const cookies = new Cookies();
+    
+    const [chats_data,set_chats_data]=useState([]);
+    const access_user_token = cookies.get('user_token');
+    const user_id = cookies.get('user_id');
+     
+    const [search_query,set_search_query]=useState('');
+
+    useEffect(()=>{
+      get_Data()
+    },[search_query])
+  
+    const get_Data=async()=>{
+      //console.log(search_query)
+      await All_Chats(access_user_token).then((response)=>{
+          //console.log(response?.filter((item)=>item?.user_id.includes(user_id) && item?.original_name.toLowerCase().includes(search_query.toLowerCase())))
+          set_chats_data(response?.filter((item)=>item?.user_id.includes(user_id) && item?.original_name.toLowerCase().includes(search_query.toLowerCase())))
+      }).catch((err)=>{
+          console.log(err)
+      })
+    }
   return (
     <Box bgColor='#fff' borderRadius={'5'} p='4' boxShadow={'sm'}>
       <HStack align='center' p='2'>
@@ -24,7 +47,7 @@ export default function Page() {
       </HStack>
       {/**The search section goes here */}
       <HStack>
-        <Search_Input description='search files, chats'/>
+        <Search_Input description='search files, chats' set_search_query={set_search_query}/>
         <Action_Button
             bgColor='#192A51'
             borderRadius='5'
@@ -39,9 +62,9 @@ export default function Page() {
       <Divider/>
       {/**The chats section starts here */}
       <SimpleGrid minChildWidth='250px' spacing='20px' mt='2'>
-        {arr?.map((index,item)=>{
+        {chats_data?.map((chat)=>{
           return(
-            <Chat_card key={index}/>
+            <Chat_card key={chat?._id} chat={chat}/>
           )
         })}
       </SimpleGrid>

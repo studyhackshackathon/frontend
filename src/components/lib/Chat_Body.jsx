@@ -1,11 +1,62 @@
-import { Box, Divider, Flex, Grid, GridItem, HStack, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Text, Tr } from '@chakra-ui/react'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { Box, Divider, Flex, Grid, GridItem, HStack, Icon, IconButton, Input, InputGroup, InputLeftElement, InputRightElement, Text, Tr, useToast } from '@chakra-ui/react'
 import { IoClose } from 'react-icons/io5'
 import { MdCleaningServices } from 'react-icons/md'
 import CustomToolTip from './ToolTip'
-import { IoIosSend } from 'react-icons/io'
+import { IoIosSend } from 'react-icons/io';
+import axios from 'axios';
 
 export default function Chat_Body(props) {
+  const toast = useToast();
+  const {chats, pdf_id, access_user_token, set_is_refresh_data} = {...props};
+  const [question,set_question]=useState('');
+  const [is_submitted,set_is_submitted]=useState(false);
+
+  const handle_ask_question=async()=>{
+    if(question == ''){
+      toast({
+        title: "",
+        description: 'You did not give an input',
+        status: 'info',
+        isClosable: true,
+        position: 'top-left',
+        variant:'left-accent'
+      });
+      return ;
+    }
+    let data = {
+      'question': question
+    };
+    
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `https://api-docs-studyhacks-v1.onrender.com/chats/${pdf_id}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${access_user_token}`,
+      },
+      data : data
+    };
+    
+    await axios.request(config).then((response) => {
+      set_is_refresh_data(`${question}`)
+      set_question('');
+      set_is_submitted(!is_submitted)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+  const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
+
+    useEffect(() => {
+      scrollToBottom()
+    }, [is_submitted]);
   return (
     <Grid 
       w={{
@@ -19,7 +70,7 @@ export default function Chat_Body(props) {
       h='100%' 
       gridTemplateRows={'50px 1fr 30px'}
       boxShadow={'sm'}
-      {...props}
+      display={props?.display}
       zIndex={999}
     >
       <GridItem display={'flex'} alignItems={'center'} justifyContent='space-between'>
@@ -52,14 +103,15 @@ export default function Chat_Body(props) {
           md : '100%'
         }}
       >
-        <Conversation_Body/>
-        <Input_Card/>
+        <Conversation_Body chats={chats} messagesEndRef={messagesEndRef}/>
+        <Input_Card set_question={set_question} handle_ask_question={handle_ask_question} question={question}/>
       </GridItem>
     </Grid>
   )
 }
 
-const Conversation_Body=()=>{
+const Conversation_Body=(props)=>{
+  const {chats,messagesEndRef,ref} = {...props};
   return(
     <Box 
       overflowY={'scroll'} 
@@ -72,97 +124,65 @@ const Conversation_Body=()=>{
       boxShadow={'sm'}
       bgColor={'#E1D9E7'}
       borderRadius={5}
+      ref={messagesEndRef}
     >
-      {conversations?.map((conversation)=>{
+      {chats?.map((chat)=>{
         return(
-          <Text_Card key={conversation?.id} conversation={conversation}/>
+          <Text_Card key={chat?._id} chat={chat}/>
         )
       })}
+      
     </Box>
   )
 }
 
 const Text_Card=(props)=>{
   return(
-      <Box 
-        align={props?.conversation?.owner === 'user' ? 'right' : 'left'} 
+      <Box
+      w='100%'
       >
+        <HStack
+          w='50%'
+        >
+          <Text
+            bgColor='#8B3C7F'
+            p='2'
+            mt='2'
+            borderRadius={'5'}
+            color='#FFFFFF'
+            align='right'
+            textAlign={'left'}
+            w={'100%'}
+            fontSize='sm'
+          > 
+            {props?.chat?.question}
+          </Text>
+        </HStack>
         <Text
-          bgColor={props?.conversation?.owner === 'user' ? '#8B3C7F' : '#FFFFFF'}
+          bgColor='#FFFFFF'
           p='2'
           mt='2'
           borderRadius={'5'}
-          color={props?.conversation?.owner === 'user' ? '#FFFFFF' : '#000000'}
+          color='#000000'
+          align='left'
           textAlign={'left'}
-          w={'225px'}
+          w={''}
           fontSize='sm'
         > 
-        {props?.conversation?.message}
+          {props?.chat?.answer}
         </Text>
       </Box>
   )
 }
 
-const Input_Card=()=>{
+const Input_Card=(props)=>{
+  const {set_question,handle_ask_question,question} = {...props}
   return(
     <InputGroup mt='2'>
-        <Input type='text' placeholder={'Ask something'} fontWeight={'semibold'} fontSize={'sm'} bg='#FFF' variant={'filled'} focusBorderColor='#8B3C7F'/>
-        <InputRightElement cursor={'pointer'}>
+        <Input type='text' value={question} placeholder={'Ask something'} fontWeight={'semibold'} fontSize={'sm'} bg='#FFF' variant={'filled'} focusBorderColor='#8B3C7F' onChange={((e)=>{set_question(e.target.value)})}/>
+        <InputRightElement cursor={'pointer'} onClick={handle_ask_question}>
           <IoIosSend color='#B051A2' />
         </InputRightElement>
     </InputGroup>
   )
 }
-
-const conversations=[
-  {
-    id:1,
-    owner: 'user',
-    message: 'who wrote this article?'
-  },
-  {
-    id:2,
-    owner: 'assistant',
-    message: 'The article does not mention the specific author.'
-  },
-  {
-    id:3,
-    owner: 'user',
-    message: 'Isnt it Jon Stam?'
-  },
-  {
-    id:4,
-    owner: 'assistant',
-    message: 'Apologies for the confusion. Yes, the article "A Fluid Dynamics Solver for Game Engines" is indeed written by Jon Stam.'
-  },
-  {
-    id:5,
-    owner: 'user',
-    message: 'What is the navier stokes equations?'
-  },
-  {
-    id:6,
-    owner: 'user',
-    message: 'who wrote this article?'
-  },
-  {
-    id:7,
-    owner: 'assistant',
-    message: 'The article does not mention the specific author.'
-  },
-  {
-    id:8,
-    owner: 'user',
-    message: 'Isnt it Jon Stam?'
-  },
-  {
-    id:9,
-    owner: 'assistant',
-    message: 'Apologies for the confusion. Yes, the article "A Fluid Dynamics Solver for Game Engines" is indeed written by Jon Stam.'
-  },
-  {
-    id:10,
-    owner: 'user',
-    message: 'What is the navier stokes equations?'
-  },
-]

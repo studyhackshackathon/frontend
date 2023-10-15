@@ -1,6 +1,7 @@
-import { Suspense } from 'react'
+'use client'
+import { Suspense} from 'react'
 import SideBar from '../../components/sidebar'
-import Loading from './loading'
+import Loading from './loading';
 
 export default function DashboardLayout({ children }) {
     return (

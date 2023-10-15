@@ -36,7 +36,7 @@ export default function Body(props){
             {...props}
         >
             <Box>
-                <Profile_Card/>
+                <Profile_Card user_data={props?.user_data}/>
                 <Divider/>
                 {navigations?.map((nav)=>{
                     return(
@@ -46,7 +46,7 @@ export default function Body(props){
                     )
                 })}
             </Box>
-            <Footer/>
+            <Footer access_user_token={props?.access_user_token}/>
         </Flex>
     )
 }
@@ -70,22 +70,27 @@ const navigations = [
         path: 'chats',
         icon: HiOutlineChatAlt2,
     },
+    
     {
+        id:'4',
+        title:'Profile',
+        path: 'profile',
+        icon: CgProfile,
+    },
+    
+]
+
+/**
+ * {
         id:'4',
         title:'Study Analytics',
         path: '',
         icon: SiGoogleanalytics,
     },
-    {
-        id:'5',
-        title:'Profile',
-        path: '',
-        icon: CgProfile,
-    },
-    {
+ * {
         id:'6',
         title:'Pricing',
         path: '',
         icon: GiUpgrade,
     },
-]
+ */

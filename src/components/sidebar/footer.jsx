@@ -10,14 +10,14 @@ import SignOut from "../../api/auth/signout.jsx";
 import {BiLogOut} from 'react-icons/bi';
 
 export default function Footer(props){
-    const {access_token} = {...props}
+    const {access_user_token} = {...props}
     // utils
-    const toast = useToast();
     const router = useRouter();
+    const toast = useToast();
     // functions
     const handleSignOut=async()=>{
-        await SignOut(access_token).then((response)=>{
-            console.log(response)
+        await SignOut(access_user_token).then((response)=>{
+            router.push('/')
             if(response.status == 200){
                 toast({
                     title: "Successfully signed out",

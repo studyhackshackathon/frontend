@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function Upload(payload) {
+export default async function New(formData,access_token) {
 	const env = process.env.NODE_ENV;
 
 	const devbaseurl = process.env.NEXT_PUBLIC_DEV_BASEURL;
@@ -12,6 +12,21 @@ export default async function Upload(payload) {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	const result = await axios.post(`${base_url}/pdfs`,payload);
-	return result;
+	console.log(Object.fromEntries(formData));
+	let config = {
+		method: 'post',
+		maxBodyLength: Infinity,
+		url: `${base_url}/pdfs`,
+		headers: { 
+			"Content-Type": "multipart/form-data",
+			'Authorization': `${access_token}`
+		},
+		data : formData
+	  };
+	
+	axios.request(config).then((response) => {
+		//console.log(JSON.stringify(response.data));
+	}).catch((error) => {
+		//console.log(error);
+	});	
 }

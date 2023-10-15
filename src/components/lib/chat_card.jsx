@@ -4,7 +4,8 @@ import React from 'react';
 import {BsFiletypePdf} from 'react-icons/bs';
 import {GoLinkExternal} from 'react-icons/go';
 
-export default function Chat_card() {
+export default function Chat_card(props) {
+  const {original_name,type_,_id} = {...props.chat};
   const router = useRouter();
   return (
     <Box 
@@ -19,7 +20,7 @@ export default function Chat_card() {
         m:'0.4'
       }}
       transition=".2s ease"
-      onClick={(()=>{router.push('/dashboard/chats/chat/1')})}
+      onClick={(()=>{router.push(`/dashboard/chats/chat/${_id}`)})}
     >
       <Image
         src='/assets/chat_image.jpg'
@@ -31,7 +32,7 @@ export default function Chat_card() {
         
       />
       <Box mt='2'>
-        <Text fontSize={'sm'} fontWeight={'bold'}>Web Development</Text>
+        <Text fontSize={'sm'} fontWeight={'bold'}>{original_name}</Text>
         <HStack py='1'>
           <Icon
               boxSize="4"
@@ -40,7 +41,7 @@ export default function Chat_card() {
               }}
               as={BsFiletypePdf}
           />
-          <Text fontSize={'xs'} fontWeight={'bold'}>Pdf</Text>
+          <Text fontSize={'xs'} fontWeight={'bold'}>{type_}</Text>
         </HStack>
         <IconButton 
           aria-label='View document' 

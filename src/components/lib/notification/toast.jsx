@@ -4,8 +4,6 @@ import React from "react";
 export default function ShowToast(props){
     const toast = useToast();
     const { title, description, status } = props;
-    console.log(props);
-
     return toast({
         title: title,
         description: description,

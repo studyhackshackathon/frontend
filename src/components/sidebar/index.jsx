@@ -4,46 +4,46 @@ import React, { useEffect, useState } from "react";
 import Body from "./body";
 import Header from "./header";
 // utilities 
-const { Box, Drawer, DrawerOverlay, DrawerContent, useDisclosure, useToast } = require("@chakra-ui/react");
+import  {Box, Drawer, DrawerOverlay, DrawerContent, useDisclosure, useToast } from "@chakra-ui/react" ;
 import Cookies from 'universal-cookie'; 
-import { useRouter } from "next/navigation";
-import Fetch_User from "../../api/auth/fetch_user.jsx";
+import Fetch_User from "@/src/api/auth/fetch_user";
+import {useRouter} from 'next/navigation'
 
 export default function Section(props){
     // utilities
     const sidebar_toggle = useDisclosure();
-    const toast = useToast();
-    const cookies = new Cookies();
-    const router  = useRouter();
-    // apis
-    // data handlers
-    const [user_data,set_user_data]=useState({})
-	const access_token = cookies.get('user_token');
-    const user_id = cookies.get('user_id');
+    const [user_data,set_user_data]=useState({});
 
+    const cookies = new Cookies();
+    const toast = useToast();
+    const access_user_token = cookies.get('user_token');
+    const user_id = cookies.get('user_id');
+    const router = useRouter();
 
     useEffect(()=>{
-        get_data();
-    },[user_id]);
-
-    const get_data=async()=>{
-        const result = await Fetch_User(user_id,access_token);
-        console.log(result)
-    }
+        Fetch_User(user_id,access_user_token).then((response)=>{
+            set_user_data(response?.data)
+        }).catch((err)=>{
+            console.log(err)
+        })
+    },[access_user_token,user_id])
     
-    if(!access_token){
-        toast({
-            title: "Your token is missing",
-            description: '',
-            status: 'info',
-            isClosable: true,
-            position: 'top-left',
-            variant:'left-accent'
-        });
-        router.push('/');
-        return ;
+    try{
+        if(!access_user_token){
+            toast({
+                title: "Your token is missing",
+                description: '',
+                status: 'info',
+                isClosable: true,
+                position: 'top-left',
+                variant:'left-accent'
+            });
+            router.push('/');
+            return ;
+        }
+    }catch(error){
+        console.error(error)
     }
-
     return(
         <Box 
             as="section"
@@ -57,7 +57,8 @@ export default function Section(props){
                     md: "unset", // big screen
                 }}
                 borderRight="none"
-                access_token={access_token}
+                user_data={user_data}
+                access_user_token={access_user_token}
             />
             <Drawer
                 isOpen={sidebar_toggle.isOpen}
@@ -73,7 +74,8 @@ export default function Section(props){
                             base: "unset",
                             md: "none",
                         }}
-                        access_token={access_token}
+                        user_data={user_data}
+                        access_user_token={access_user_token}
                     />
                 </DrawerContent>
             </Drawer>
@@ -84,7 +86,7 @@ export default function Section(props){
                 }}
                 transition=".3s ease"
             >
-                <Header sidebar_toggle={sidebar_toggle}/>
+                <Header sidebar_toggle={sidebar_toggle} user_data={user_data}/>
                 <Box p='2'>
                     {props?.children}
                 </Box>

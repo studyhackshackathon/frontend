@@ -1,8 +1,6 @@
 import axios from 'axios';
-import Cookies from 'universal-cookie';
 
-export default async function SignIn(payload) {
-	const cookies = new Cookies();
+export default async function New_Chat(pdf_id,access_user_token,question) {
 	const env = process.env.NODE_ENV;
 
 	const devbaseurl = process.env.NEXT_PUBLIC_DEV_BASEURL;
@@ -14,19 +12,17 @@ export default async function SignIn(payload) {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-
+    let data = JSON.stringify({question: question});
+    console.log(pdf_id,access_user_token,data)
 	let config = {
 		method: 'post',
 		maxBodyLength: Infinity,
-		url: `${base_url}/login`,
+		url: `${base_url}/chats/${pdf_id}`,
 		headers: { 
-		  'Content-Type': 'application/json'
+			'Authorization': `${access_user_token}`,
 		},
-		data : payload
-	};
-	
+        data : data
+	  };
 	const result = await axios.request(config);
-	cookies.set('user_token', result?.data?.access_token, { path: '/' });
-	cookies.set('user_id', result?.data?.user?._id, { path: '/' });
-	return result;
+	return result?.data;
 }

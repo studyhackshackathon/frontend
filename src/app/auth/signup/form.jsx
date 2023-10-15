@@ -21,6 +21,8 @@ export default function Form() {
     const [institution,set_institution]=useState('');
 
     const [input_error,set_input_error]=useState(false);
+
+    const [is_submitting,set_is_submitting]=useState(false);
      
     const payload={
         email,
@@ -36,6 +38,7 @@ export default function Form() {
     }
 
     const handleSubmit=async()=>{
+        set_is_submitting(true)
         try{
             if(password && email && username && institution && mobile ){
                 await SignUp(payload).then((res)=>{
@@ -62,10 +65,12 @@ export default function Form() {
                     }
                 }).finally(()=>{
                     set_input_error(false);
+                    set_is_submitting(false);
                 })
             }
             if(!password || !email || !username || !institution || !mobile){
                 set_input_error(true);
+                set_is_submitting(false);
                 return toast({
                     title: "Failed creating an account",
                     description: 'all the inputs are required',
@@ -86,6 +91,7 @@ export default function Form() {
                     position: 'top-left',
                     variant:'left-accent'
                 });
+                set_is_submitting(false);
                 return ;
             }else if(error?.code === 'ERR_BAD_REQUEST'){
                 toast({
@@ -96,6 +102,7 @@ export default function Form() {
                     position: 'top-left',
                     variant:'left-accent'
                 });
+                set_is_submitting(false);
                 return ;
             }else{
                 toast({
@@ -106,6 +113,7 @@ export default function Form() {
                     position: 'top-left',
                     variant:'left-accent'
                 });
+                set_is_submitting(false);
                 return ;
             }
 
@@ -170,9 +178,7 @@ export default function Form() {
                     null
                 )}
             </FormControl>
-            <SignUp_btn handleSubmit={handleSubmit}>
-                Sign Up
-            </SignUp_btn>
+            <SignUp_btn handleSubmit={handleSubmit} is_submitting={is_submitting} title={'creating your account...'}> Sign Up </SignUp_btn>
             <Box position='relative' padding='10'>
                 <Divider />
                 <AbsoluteCenter bg='white' px='4'>

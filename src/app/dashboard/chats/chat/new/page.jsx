@@ -1,17 +1,64 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 // utils
-import { Box, Button, Divider, Flex, HStack, Heading, Icon, Text } from '@chakra-ui/react';
+import { 
+    Box, 
+    Button,
+    Flex, 
+    HStack, 
+    Heading, 
+    Icon, 
+    IconButton,
+    Text, 
+    Tooltip 
+} from '@chakra-ui/react';
 // components
-// import Option_Card from '@/src/components/home/option_card';
 // icons
 import {BsArrowLeft,BsInfoCircleFill} from 'react-icons/bs';
 import Drop_Zone from '@/src/components/lib/dropzone';
 import { useRouter } from 'next/navigation';
-
+import Cookies from 'universal-cookie'; 
+import axios from 'axios';
+import {MdCloudDone} from 'react-icons/md'
+import {IoMdClose} from 'react-icons/io';
 
 export default function Page() {
   const router = useRouter();
+  const cookies = new Cookies();
+  const access_user_token = cookies.get('user_token');
+
+  const [is_file_uploaded,set_is_file_uploaded]=useState(false);
+  const [is_submitting,set_is_submitting]=useState(false);
+
+  const [file,set_file]=useState('');
+
+  const UploadDocument = async() => {  
+    const formData = new FormData();
+    formData.append('file', file);
+    set_is_submitting(true);
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `https://api-docs-studyhacks-v1.onrender.com/pdfs`,
+        headers: { 
+            'Content-Type': 'multipart/form-data',
+          'Authorization': `${access_user_token}`,
+        },
+        data : formData
+      };
+
+    try {
+        await axios.request(config).then((response) => {
+                set_is_file_uploaded(true)
+                set_is_submitting(false)
+                router.push(`/dashboard/chats/chat/${response?.data?.id}`);
+            }).catch((error) => {
+                console.log(error);
+            });
+    } catch (error) {
+        console.error(error);
+    }
+  }
   return (
     <Box bgColor='#fff' borderRadius={'5'} p='4' boxShadow={'lg'} >
         <Button leftIcon={<BsArrowLeft />} onClick={(()=>{router.back()})}>
@@ -46,14 +93,40 @@ export default function Page() {
                 md:'6'
             }}
         >
-            <Drop_Zone/>
+        {is_file_uploaded?
+            <Uploaded_Card_Item name={file?.name}/>
+            :
+            <>
+                {file?
+                    <Box border='1px' borderColor='#eee' borderStyle='solid' p='2' borderRadius='md' >
+                        <Selected_Card_Item name={file?.name} set_file={set_file}/>
+                    </Box>
+                :
+                    <Drop_Zone set_file={set_file}/>
+                }
+            </>
+        }
+        {is_submitting?
             <Button
+                isLoading
+                loadingText='Uploading...'
                 bgColor='#8B3C7F'
                 color={'#fff'}
                 mt='2'
             >
                 Upload File
             </Button>
+            :
+            <Button
+                bgColor='#8B3C7F'
+                color={'#fff'}
+                mt='2'
+                onClick={UploadDocument}
+            >
+                Upload File
+            </Button>
+
+        }
         </Box>
     </Box>
   )
@@ -119,4 +192,30 @@ const Option_Card=(props)=>{
             />
         </Box>
     )
+}
+
+const Selected_Card_Item=({name,set_file})=>{
+    const handle_remove_file=()=>{
+        set_file('')
+    }
+	return(
+		<HStack justify='space-between'>
+            <HStack>
+                <Icon as={MdCloudDone} color='orange'/>
+                <Text w='100%' >{name}</Text>
+            </HStack>
+            <Tooltip label={`Remove ${name}`} placement='auto'>
+                <IconButton aria-label='Remove File' icon={<IoMdClose/>} onClick={handle_remove_file}/>
+            </Tooltip>
+        </HStack>
+	)
+}
+
+const Uploaded_Card_Item=({name})=>{
+	return(
+		<Flex boxShadow='lg' borderRadius='5' p='2' borderRight='2px solid green'>
+			<Text w='100%' >{name} uploaded</Text>
+            <Icon as={MdCloudDone} color='green'/>
+		</Flex>
+	)
 }

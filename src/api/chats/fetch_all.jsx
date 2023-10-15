@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function Fetch(payload) {
+export default async function All_Chats(access_token) {
 	const env = process.env.NODE_ENV;
 
 	const devbaseurl = process.env.NEXT_PUBLIC_DEV_BASEURL;
@@ -12,6 +12,14 @@ export default async function Fetch(payload) {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	const result = await axios.get(`${base_url}/pdfs`);
-	return result;
+	let config = {
+		method: 'get',
+		maxBodyLength: Infinity,
+		url: `${base_url}/pdfs`,
+		headers: { 
+			'Authorization': `${access_token}`,
+		},
+	  };
+	const result = await axios.request(config);
+	return result?.data;	
 }

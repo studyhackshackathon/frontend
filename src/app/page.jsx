@@ -21,7 +21,7 @@ export default function Page() {
           src='/assets/logo.png' 
           objectFit={'cover'} 
           alt='logo' 
-          w='50%' 
+          w={{base:'',md:'50%'}} 
           h='30%'
           position={'absolute'}
           top='22.5%'
@@ -49,32 +49,51 @@ export default function Page() {
             SignIn
           </Text>
           <Button
-            bgColor={'#8B3C7F'}
+            bgColor={'#fff'}
+            color={'#8B3C7F'}
             cursor={'pointer'}
             boxShadow={'md'}
             onClick={(()=>router.push('/auth/signup'))}
           >
             <Text
               fontWeight={'bold'}
-              color={'#fff'}
             >Get Started</Text>
           </Button>
         </Flex>
         <Box
           position={'absolute'}
-          top='60%'
-          right='10%'
+          top='50%'
+          right='5%'
           p='4'
           gap='4'
           mr='4'
           align='center'
+          display={{base:'none',md:'block'}}
         >
           <Text 
             fontSize={'42px'}
             color={'#fff'}
             fontWeight={'bold'}
           >
-            Unlock Your Learning<br/> Potential with <span style={{textDecoration:'underline'}}>AI</span>.
+            Unlock Your Learning Potential.
+          </Text>
+        </Box>
+        <Box
+          position={'absolute'}
+          top='42.5%'
+          right='2.5%'
+          p='4'
+          gap='4'
+          mr='4'
+          align='center'
+          display={{base:'block',md:'none'}}
+        >
+          <Text 
+            fontSize={'16px'}
+            color={'#fff'}
+            fontWeight={'bold'}
+          >
+            Unlock Your Learning Potential.
           </Text>
         </Box>
       </Box>

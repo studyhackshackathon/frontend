@@ -4,11 +4,54 @@ import { Box, Divider, Flex, SimpleGrid, Text } from "@chakra-ui/react"
 // components
 import Option_Card from "@/src/components/home/option_card";
 import Chat_card from "@/src/components/lib/chat_card";
+import { useEffect, useState } from "react";
+import Cookies from 'universal-cookie'; 
+import axios from "axios";
+import All_Chats from "@/src/api/chats/fetch_all";
+import Summary_card from "@/src/components/lib/summary_card";
 
-export default function page() {
-  let chats_arr = [1,2,3,4,5,6,7,8];
-  let summaries_arr = [1,2,3,4,5,6,7,8];
-  let arr = [...chats_arr,...summaries_arr]
+export default function Page() {
+  const cookies = new Cookies();
+    
+  const [chats_data,set_chats_data]=useState([]);
+  const access_user_token = cookies.get('user_token');
+  const user_id = cookies.get('user_id');
+
+  useEffect(()=>{
+    get_Chats_Data()
+  },[])
+
+  const get_Chats_Data=async()=>{
+    await All_Chats(access_user_token).then((response)=>{
+        set_chats_data(response?.filter((item)=>item?.user_id.includes(user_id)))
+    }).catch((err)=>{
+        console.log(err)
+    })
+  }
+
+  const [summary_data,set_summary_data]=useState([]);
+  useEffect(()=>{
+    get_Summary_Data()
+  },[])
+  
+    const get_Summary_Data=async()=>{
+      let config = {
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: 'https://api-docs-studyhacks-v1.onrender.com/sammary',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `${access_user_token}`,
+          },
+      };
+      await axios.request(config).then((response) => {
+          let data = response?.data?.summaries;
+          let filteredData = data?.filter((item)=>item?.user_id.includes(user_id))
+          set_summary_data(filteredData.reverse().slice(0,2));
+      }).catch((error) => {
+          console.log(error);
+      });
+    }
   return (
     <Box bgColor='#fff' borderRadius={'5'} p='2' boxShadow={'sm'}>
       <Flex gap='2' direction={{base:'column',md:'row'}}>
@@ -22,9 +65,14 @@ export default function page() {
         <Text fontWeight={'bold'} py='2'>Recent activity</Text>
         <Divider/>
         <SimpleGrid minChildWidth='250px' spacing='20px' mt='2'>
-          {arr?.slice(0,8).map((index,item)=>{
+          {chats_data?.slice(0,8).map((chat)=>{
             return(
-              <Chat_card key={index}/>
+              <Chat_card key={chat?._id} chat={chat}/>
+            )
+          })}
+          {summary_data?.slice(0,8).map((item)=>{
+            return(
+              <Summary_card key={item?._id} item={item}/>
             )
           })}
         </SimpleGrid>

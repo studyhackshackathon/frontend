@@ -4,7 +4,9 @@ import React from 'react';
 import {BsFiletypePdf} from 'react-icons/bs';
 import {GoLinkExternal} from 'react-icons/go';
 
-export default function Summary_card() {
+export default function Summary_card(props) {
+  const {_id,pdf_id,type_,title}={...props?.item};
+  //console.log(props?.item)
   const router = useRouter();
   return (
     <Box 
@@ -19,7 +21,7 @@ export default function Summary_card() {
         m:'0.4'
       }}
       transition=".2s ease"
-      onClick={(()=>{router.push('/dashboard/summaries/summary/1')})}
+      onClick={(()=>{router.push(`/dashboard/summaries/summary/${_id}`)})}
     >
       <Image
         src='/assets/chat_image.jpg'
@@ -31,7 +33,7 @@ export default function Summary_card() {
         
       />
       <Box mt='2'>
-        <Text fontSize={'sm'} fontWeight={'bold'}>Web Development</Text>
+        <Text fontSize={'sm'} fontWeight={'bold'}>{title? title : _id}</Text>
         <HStack py='1'>
           <Icon
               boxSize="4"
@@ -40,7 +42,7 @@ export default function Summary_card() {
               }}
               as={BsFiletypePdf}
           />
-          <Text fontSize={'xs'} fontWeight={'bold'}>Text</Text>
+          <Text fontSize={'xs'} fontWeight={'bold'}>{type_}</Text>
         </HStack>
         <IconButton 
           aria-label='View summary' 

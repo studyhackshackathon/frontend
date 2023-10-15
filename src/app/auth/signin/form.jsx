@@ -16,7 +16,7 @@ import {
 import { useRouter } from 'next/navigation';
 // components
 import Login_btn from '../../../components/lib/auth/sign_up_btn';
-import SignIn from '@/src/api/auth/signin';
+import SignIn from '@/src/api/auth/signin';;
 
 export default function Form() {
     // utils
@@ -27,12 +27,15 @@ export default function Form() {
     const [password,set_password]=useState('');
     const [input_error,set_input_error]=useState(false);
 
+    const [is_submitting,set_is_submitting]=useState(false);
+
     const payload={
         email,
         password
     }
 
     const handleSubmit=async()=>{
+        set_is_submitting(true)
         try{
             if(password && email ){
                 await SignIn(payload).then((res)=>{
@@ -59,10 +62,12 @@ export default function Form() {
                     }
                 }).finally(()=>{
                     set_input_error(false);
+                    set_is_submitting(false);
                 })
             }
             if(!password || !email ){
                 set_input_error(true);
+                set_is_submitting(false);
                 return toast({
                     title: "Failed signing in",
                     description: 'all the inputs are required',
@@ -74,6 +79,7 @@ export default function Form() {
             }
         }catch(error){
             console.log(error)
+            set_is_submitting(false);
             if (error?.code === 'ERR_NETWORK'){
                 toast({
                     title: "Error while signing in",
@@ -107,6 +113,7 @@ export default function Form() {
             }
         }
     }
+
     return (
         <Box 
             w={{base:'85%',md:'50%'}}
@@ -132,8 +139,8 @@ export default function Form() {
                     null
                 )}
             </FormControl>
-            <Text color='red.400' fontWeight={'semibold'} fontSize={'sm'} textAlign={'end'} my='2'>forgot password ?</Text>
-            <Login_btn handleSubmit={handleSubmit}>
+            <Text color='red.400' fontWeight={'semibold'} fontSize={'sm'} textAlign={'end'} my='2' cursor='pointer'>forgot password ?</Text>
+            <Login_btn handleSubmit={handleSubmit} is_submitting={is_submitting} title={'signing you in...'}>
                 Sign In
             </Login_btn>
             <Box position='relative' padding='10'>

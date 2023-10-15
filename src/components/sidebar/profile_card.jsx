@@ -3,8 +3,11 @@ import { useRouter } from "next/navigation";
 import React from "react";
 const { Box, Text, Image, Avatar, HStack } = require("@chakra-ui/react");
 
-export default function Profile_Card(){
-    const router = useRouter()
+export default function Profile_Card(props){
+    // utilities
+    const router = useRouter();
+    // data
+    const {email,institution,mobile,name,password,profile_complete,profile_picture,role,_id} = {...props.user_data};
     return(
         <Box
             px={{
@@ -35,14 +38,15 @@ export default function Profile_Card(){
             />
             <HStack>
                 <Avatar
-                    name='john doe'
+                    name={name}
                     borderRadius={'5'}
                     size='md'
                     src=''
                 />
-                <Box align='center'>
-                    <Text fontWeight={'bold'}>Dennis Sammy</Text> 
-                    <Text fontSize={'xx-small'} color='gray'>dennissammy@gmail.com</Text>
+                <Box align=''>
+                    <Text fontWeight={'bold'}>{name}</Text> 
+                    <Text fontSize={'xx-small'} color='gray'>{email}</Text>
+                    <Text fontSize={'xx-small'} color='gray'>{institution?.slice(0, 10)}...</Text>
                 </Box>
             </HStack>
         </Box>

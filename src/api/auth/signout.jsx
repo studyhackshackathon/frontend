@@ -14,21 +14,7 @@ export default async function SignOut(access_token) {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	console.log(access_token)
-
-	let config = {
-		method: 'post',
-		maxBodyLength: Infinity,
-		url: `${base_url}/logout`,
-		headers: { 
-			'Content-Type': 'application/json',
-		  	'Authorization': `Bearer ${access_token}`
-		}
-	};
-	await axios.request(config).then((response) => {
-		console.log(JSON.stringify(response.data));
-	})
-	.catch((error) => {
-		console.log(error);
-	});
+	cookies.remove('user_token', { path: '/' });
+	cookies.remove('user_id', { path: '/' });
+	return true;
 }

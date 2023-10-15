@@ -1,8 +1,11 @@
 import { ChakraProvider } from '@chakra-ui/react';
 
 export const metadata = {
-  title: 'Studyhacks',
-  description: 'Unlocking Your Learning Potential With AI',
+  title: 'STUDYHACKS',
+  description: 'Making complex topics easier to master.',
+  icons: {
+    icon: '/assets/favicon.png',
+  },
 }
 
 export default function RootLayout({ children }) {

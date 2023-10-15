@@ -18,12 +18,10 @@ export default async function Fetch_User(id,access_token) {
 		maxBodyLength: Infinity,
 		url: `${base_url}/users/${id}`,
 		headers: {
-		  	'Authorization': `Bearer ${access_token}`
+		  	'Authorization': `${access_token}`
 		}
 	};
 	
-	const result = await axios.request(config).catch((err)=>{
-        console.log(err)
-    });
+	const result = await axios.request(config).catch((err)=>{console.log(err)});
 	return result;
 }

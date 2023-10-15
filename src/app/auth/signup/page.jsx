@@ -1,4 +1,4 @@
-import { Box, HStack, Text } from '@chakra-ui/react'
+import { Box, HStack, Image, Text } from '@chakra-ui/react'
 import React from 'react';
 //components
 import Form from './form';
@@ -10,9 +10,18 @@ export default function Pages() {
         display={{base:'none',md:'inline'}}
         w={{base:'0',md:'50vw'}}
         h='100%'
-        bg='#D9d9d9'
+        bg='#CF74A8'
       >
-        <Text>Study\=</Text>
+        <Image 
+          src='/assets/logo.png' 
+          objectFit={'cover'} 
+          alt='logo' 
+          w='40%' 
+          h='30%'
+          position={'absolute'}
+          top='32.5%'
+          left='5%'
+        />
       </Box>
       <Box 
         w={{base:'100vw',md:'50vw'}}

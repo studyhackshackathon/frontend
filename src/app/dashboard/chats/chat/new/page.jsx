@@ -15,12 +15,15 @@ import {
 // components
 // icons
 import {BsArrowLeft,BsInfoCircleFill} from 'react-icons/bs';
-import Drop_Zone from '@/src/components/lib/dropzone';
+import Drop_Zone from '../../../../../components/lib/dropzone';
 import { useRouter } from 'next/navigation';
 import Cookies from 'universal-cookie'; 
 import axios from 'axios';
 import {MdCloudDone} from 'react-icons/md'
 import {IoMdClose} from 'react-icons/io';
+
+import {storage} from '../../../../../components/lib/db/firebase'
+import {ref,uploadBytes,getDownloadURL} from 'firebase/storage';
 
 export default function Page() {
   const router = useRouter();
@@ -59,6 +62,35 @@ export default function Page() {
         console.error(error);
     }
   }
+
+    const file_upload_to_firebase_storage=async()=>{
+        set_is_submitting(true);
+        if (file?.name == undefined){
+            toast({
+                position: 'top-left',
+                variant:"subtle",
+                title: '',
+                description: 'could not find file, try re-uploading it.',
+                status: 'error',
+                isClosable: true,
+            })
+            setTimeout(() =>{
+                set_is_file_uploaded(true)
+                set_is_submitting(false);
+            },3000)
+            return ;
+        }else{
+            const file_documentRef = ref(storage, `file/${file?.name}`);
+            const snapshot= await uploadBytes(file_documentRef,file);
+            const file_url = await getDownloadURL(snapshot.ref);
+            cookies.set('file_url', file_url, { path: '/' });
+            setTimeout(() =>{
+                set_is_submitting(false);
+            },3000)
+            return file_url;
+        }
+        
+    }
   return (
     <Box bgColor='#fff' borderRadius={'5'} p='4' boxShadow={'lg'} >
         <Button leftIcon={<BsArrowLeft />} onClick={(()=>{router.back()})}>

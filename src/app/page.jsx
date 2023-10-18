@@ -13,8 +13,8 @@ export default function Page() {
         backgroundColor={'#8B3C7F'}
       >
         <Image 
-          // src='/assets/landing_page.jpg' 
-          src='' 
+          src='/assets/landing4.jpg' 
+          //src='' 
           objectFit={'cover'} 
           alt='logo' w='full' h='full'
         />
@@ -25,7 +25,7 @@ export default function Page() {
           w={{base:'',md:'50%'}} 
           h='30%'
           position={'absolute'}
-          top='22.5%'
+          top={{base:'30%',md:'22.5%'}}
           right='5%'
         />
         <Flex 
@@ -81,7 +81,7 @@ export default function Page() {
         </Box>
         <Box
           position={'absolute'}
-          top='42.5%'
+          top='50%'
           right='2.5%'
           p='4'
           gap='4'

@@ -164,7 +164,7 @@ export default function Form() {
                 <FormLabel fontSize={'sm'}>Institution</FormLabel>
                 <Input value={institution} placeholder='institution ' type='text' onChange={((e)=>{set_institution(e.target.value)})}/>
                 {input_error && institution == '' ? 
-                    <FormErrorMessage>Iinstitution is required</FormErrorMessage>
+                    <FormErrorMessage>Institution is required</FormErrorMessage>
                     : (
                     null
                 )}
